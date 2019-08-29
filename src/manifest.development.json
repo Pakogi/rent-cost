@@ -1,0 +1,11 @@
+{
+    "manifest_version": 2,
+    "name": "rent-cost",
+    "description": "租屋成本計算器",
+    "version": "0.0.1",
+    "options_page": "options.html",
+    "browser_action": {
+        "default_popup": "popup.html"
+    },
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
