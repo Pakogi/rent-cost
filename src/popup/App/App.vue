@@ -2,8 +2,9 @@
   <div class="main_app">
     <h1>租屋虧多少</h1>
     <p>當前網站 {{currentUrl}}</p>
+    <p>坪數{{spaceSize}}</p>
 
-    <div>成本計算開始:</div>
+    <div>每月房租:</div>
 
     <input type="text" v-model="rentPrice" placeholder="15000">
 
@@ -35,6 +36,7 @@
     </ul>
 
 
+    <div>每坪數約 {{ calculateAverageCostBySize }} 元</div>
     <div>總計裸屋成本約：{{ calculateTotalCost }} </div>
 
   </div>
@@ -55,7 +57,8 @@ export default {
       "dispenser": 300
     },
     currentUrl: null,
-    rentPrice: 0
+    rentPrice: 0,
+    spaceSize: 0
   }),
   mounted() {
     this.fetchRentPrice()
@@ -73,21 +76,30 @@ export default {
       })
 
       return this.rentPrice - additionCost
+    },
+    calculateAverageCostBySize: function() {
+      return Math.round(this.calculateTotalCost / this.spaceSize)
     }
   },
   methods: {
     fetchRentPrice() {
       const setRentPrice = (price) => { this.rentPrice = price }
+      const setSpaceSize = (size) => { this.spaceSize = size }
 
       chrome.tabs.executeScript({
           code: '(' + function() {
-            return { price: document.getElementsByClassName("price")[0].innerText };
+            return { price: document.getElementsByClassName("price")[0].innerText, spaceSize: document.getElementsByClassName("attr")[0].querySelector("li").innerText };
           } + ')(' + JSON.stringify() + ');'
       }, function(results) {
         let priceText = results[0].price
+        let spaceSizeText = results[0].spaceSize
+
         let integerPrice = parseInt(priceText.replace(",", ""))
+        let integerSpaceSize = spaceSizeText.match(/\d+/)[0]
+
 
         setRentPrice(integerPrice)
+        setSpaceSize(integerSpaceSize)
       });
     },
     fetchCurrentUrl() {
