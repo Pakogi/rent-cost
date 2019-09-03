@@ -60,20 +60,8 @@ export default {
     rentPrice: 0
   }),
   mounted() {
-    const setCurrentUrl = (url) => { this.currentUrl = url }
-    const setRentPrice = (price) => { this.rentPrice = price }
-
-    chrome.tabs.executeScript({
-        code: '(' + function(params) {
-          return { price: document.getElementsByClassName("price")[0].innerText };
-        } + ')(' + JSON.stringify() + ');'
-    }, function(results) {
-      setRentPrice(results[0].price)
-    });
-
-    chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-      setCurrentUrl(tabs[0].url)
-    });
+    this.fetchRentPrice()
+    this.fetchCurrentUrl()
   },
   computed: {
     calculateTotalCost: function() {
@@ -90,9 +78,23 @@ export default {
     }
   },
   methods: {
-    setCurrentUrl(url) {
-      this.currentUrl = url
+    fetchRentPrice() {
+      const setRentPrice = (price) => { this.rentPrice = price }
+      chrome.tabs.executeScript({
+          code: '(' + function() {
+            return { price: document.getElementsByClassName("price")[0].innerText };
+          } + ')(' + JSON.stringify() + ');'
+      }, function(results) {
+        setRentPrice(results[0].price)
+      });
+    },
+    fetchCurrentUrl() {
+      const setCurrentUrl = (url) => { this.currentUrl = url }
+        chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+        setCurrentUrl(tabs[0].url)
+      });
     }
+
   }
 }
 </script>
