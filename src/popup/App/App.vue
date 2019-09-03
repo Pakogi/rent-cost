@@ -2,11 +2,10 @@
   <div class="main_app">
     <h1>租屋虧多少</h1>
     <p>當前網站 {{currentUrl}}</p>
-    <p>當前租金 {{rentPrice}}</p>
 
     <div>成本計算開始:</div>
 
-    <input type="text" v-model="cost" placeholder="15000">
+    <input type="text" v-model="rentPrice" placeholder="15000">
 
     <ul>
       <li>
@@ -47,7 +46,6 @@
 export default {
   name: 'app',
   data: () => ({
-    cost: 0,
     additionGroup: [],
     costLists: {
       "washingMachine": 1000,
@@ -74,23 +72,28 @@ export default {
         }
       })
 
-      return this.cost - additionCost
+      return this.rentPrice - additionCost
     }
   },
   methods: {
     fetchRentPrice() {
       const setRentPrice = (price) => { this.rentPrice = price }
+
       chrome.tabs.executeScript({
           code: '(' + function() {
             return { price: document.getElementsByClassName("price")[0].innerText };
           } + ')(' + JSON.stringify() + ');'
       }, function(results) {
-        setRentPrice(results[0].price)
+        let priceText = results[0].price
+        let integerPrice = parseInt(priceText.replace(",", ""))
+
+        setRentPrice(integerPrice)
       });
     },
     fetchCurrentUrl() {
       const setCurrentUrl = (url) => { this.currentUrl = url }
         chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+
         setCurrentUrl(tabs[0].url)
       });
     }
