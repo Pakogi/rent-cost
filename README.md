@@ -1,29 +1,24 @@
-# rent-cost
+# 租屋虧多少
 
 ## Project setup
+
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+## Development
+
 ```
-yarn run serve
+yarn run build-watch
 ```
 
-### Compiles and minifies for production
-```
-yarn run build
-```
+## Install Chrome extension
 
-### Run your tests
-```
-yarn run test
-```
+- [Offical Document](https://developer.chrome.com/extensions/getstarted)
 
-### Lints and fixes files
-```
-yarn run lint
-```
+1. 打開 Chrome 瀏覽器
+2. 點擊右上角 ... -> 更多工具 -> 擴充功能 -> 打開右上角「開發人員模式」-> 載入未封裝項目 -> 選擇本專案
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Usage
+
+打開 591，選租屋，點進去查看物件後打開本插件，可以看到內容
