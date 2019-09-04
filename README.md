@@ -17,7 +17,9 @@ yarn run build-watch
 - [Offical Document](https://developer.chrome.com/extensions/getstarted)
 
 1. 打開 Chrome 瀏覽器
-2. 點擊右上角 ... -> 更多工具 -> 擴充功能 -> 打開右上角「開發人員模式」-> 載入未封裝項目 -> 選擇本專案
+2. 點擊右上角 ... -> 更多工具 -> 擴充功能 -> 打開右上角「開發人員模式」-> 載入未封裝項目 -> 選擇專案下 `rent-cost/dist` 資料夾
+
+如果沒有 `dist` 資料夾請先跑 `yarn run build`
 
 ## Usage
 
