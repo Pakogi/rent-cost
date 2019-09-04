@@ -1,128 +1,50 @@
 <template>
-  <el-container>
-    <div class="main_app">
-      <el-header>
-        <h1>租屋虧多少</h1>
-      </el-header>
+  <div class="main-app">
+    <el-container>
+      <div v-if="isShowCalculator">
+        <cost-calculator></cost-calculator>
+      </div>
 
-      <el-main>
-        <p>當前網站 {{currentUrl}}</p>
-        <p>坪數{{spaceSize}}</p>
-
-        <div class="rent-price-wrapper">
-          <el-input v-model="rentPrice" placeholder="請輸入每月租金"></el-input>
-
-          <div class="price-text">元 / 月</div>
-        </div>
-
-        <div>
-          <el-checkbox-group v-model="additionGroup" class="options-group">
-            <el-checkbox v-for="option in options" :label="option" :key="option">{{option}}</el-checkbox>
-          </el-checkbox-group>
-        </div>
-
-        <div>每坪數約 {{ calculateAverageCostBySize }} 元</div>
-        <div>總計裸屋成本約：{{ calculateTotalCost }} </div>
-      </el-main>
-    </div>
-  </el-container>
+      <div v-else>
+        <announcement></announcement>
+      </div>
+    </el-container>
+  </div>
 </template>
 
 <script>
-const additionGroupOptions = ["沒有洗衣機", "沒有床墊", "沒有網路", "沒有飲水機", "沒有代收垃圾"]
+
+import CostCalculator from "../../components/CostCalculator"
+import Announcement from "../../components/Announcement"
+
+const rentHost = "rent.591.com.tw"
 
 export default {
-  name: 'app',
+  name: 'App',
+  components: { CostCalculator, Readme },
   data: () => ({
-    additionGroup: [],
-    options: additionGroupOptions,
-    costLists: {
-      "沒有洗衣機": 1000,
-      "沒有床墊": 1000,
-      "沒有網路": 600,
-      "沒有飲水機": 500,
-      "沒有代收垃圾": 300
-    },
-    currentUrl: null,
-    rentPrice: 0,
-    spaceSize: 0
+    isShowCalculator: false
   }),
-  mounted() {
-    this.fetchRentPrice()
-    this.fetchCurrentUrl()
-  },
-  computed: {
-    calculateTotalCost: function() {
-      console.log(this.additionGroup)
-      let additionCost = 0
-      const { additionGroup, costLists } = this
+  created () {
+    const setIsShowCalculator = (boolean) => { this.isShowCalculator = boolean }
 
-      Object.keys(costLists).forEach(function(key, index) {
-        if (additionGroup.includes(key)) {
-         additionCost += costLists[key]
-        }
-      })
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      let tab = tabs[0];
+      let url = new URL(tab.url)
+      let domain = url.hostname
 
-      return this.rentPrice - additionCost
-    },
-    calculateAverageCostBySize: function() {
-      return Math.round(this.calculateTotalCost / this.spaceSize)
-    }
-  },
-  methods: {
-    fetchRentPrice() {
-      const setRentPrice = (price) => { this.rentPrice = price }
-      const setSpaceSize = (size) => { this.spaceSize = size }
-
-      chrome.tabs.executeScript({
-          code: '(' + function() {
-            return { price: document.getElementsByClassName("price")[0].innerText, spaceSize: document.getElementsByClassName("attr")[0].querySelector("li").innerText };
-          } + ')(' + JSON.stringify() + ');'
-      }, function(results) {
-        let priceText = results[0].price
-        let spaceSizeText = results[0].spaceSize
-
-        let integerPrice = parseInt(priceText.replace(",", ""))
-        let integerSpaceSize = spaceSizeText.match(/\d+/)[0]
-
-
-        setRentPrice(integerPrice)
-        setSpaceSize(integerSpaceSize)
-      });
-    },
-    fetchCurrentUrl() {
-      const setCurrentUrl = (url) => { this.currentUrl = url }
-        chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-
-        setCurrentUrl(tabs[0].url)
-      });
-    }
+      setIsShowCalculator((domain == rentHost))
+    })
   }
 }
 </script>
 
 <style>
-.main_app {
+.main-app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   min-width: 350px;
-}
-
-.options-group {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.rent-price-wrapper {
-  display: flex;
-}
-
-.price-text {
-  flex: 1 1 30%;
-  align-self: center;
 }
 </style>
