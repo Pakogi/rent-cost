@@ -1,60 +1,47 @@
 <template>
-  <div class="main_app">
-    <h1>租屋虧多少</h1>
-    <p>當前網站 {{currentUrl}}</p>
-    <p>坪數{{spaceSize}}</p>
+  <el-container>
+    <div class="main_app">
+      <el-header>
+        <h1>租屋虧多少</h1>
+      </el-header>
 
-    <div>每月房租:</div>
+      <el-main>
+        <p>當前網站 {{currentUrl}}</p>
+        <p>坪數{{spaceSize}}</p>
 
-    <input type="text" v-model="rentPrice" placeholder="15000">
+        <div class="rent-price-wrapper">
+          <el-input v-model="rentPrice" placeholder="請輸入每月租金"></el-input>
 
-    <ul>
-      <li>
-        <input type="checkbox" v-model="additionGroup" value="washingMachine" />
-        <label>沒有洗衣機</label>
-      </li>
+          <div class="price-text">元 / 月</div>
+        </div>
 
-      <li>
-        <input type="checkbox" v-model="additionGroup" value="bed" />
-        <label>沒有床墊</label>
-      </li>
+        <div>
+          <el-checkbox-group v-model="additionGroup" class="options-group">
+            <el-checkbox v-for="option in options" :label="option" :key="option">{{option}}</el-checkbox>
+          </el-checkbox-group>
+        </div>
 
-      <li>
-        <input type="checkbox" v-model="additionGroup" value="network" />
-        <label>沒有網路</label>
-      </li>
-
-      <li>
-        <input type="checkbox" v-model="additionGroup" value="dispenser" />
-        <label>沒有飲水機</label>
-      </li>
-
-      <li>
-        <input type="checkbox" v-model="additionGroup" value="garbageCollection" />
-        <label>沒有代收垃圾</label>
-      </li>
-    </ul>
-
-
-    <div>每坪數約 {{ calculateAverageCostBySize }} 元</div>
-    <div>總計裸屋成本約：{{ calculateTotalCost }} </div>
-
-  </div>
+        <div>每坪數約 {{ calculateAverageCostBySize }} 元</div>
+        <div>總計裸屋成本約：{{ calculateTotalCost }} </div>
+      </el-main>
+    </div>
+  </el-container>
 </template>
 
-
-
 <script>
+const additionGroupOptions = ["沒有洗衣機", "沒有床墊", "沒有網路", "沒有飲水機", "沒有代收垃圾"]
+
 export default {
   name: 'app',
   data: () => ({
     additionGroup: [],
+    options: additionGroupOptions,
     costLists: {
-      "washingMachine": 1000,
-      "bed": 1000,
-      "network": 600,
-      "garbageCollection": 500,
-      "dispenser": 300
+      "沒有洗衣機": 1000,
+      "沒有床墊": 1000,
+      "沒有網路": 600,
+      "沒有飲水機": 500,
+      "沒有代收垃圾": 300
     },
     currentUrl: null,
     rentPrice: 0,
@@ -66,6 +53,7 @@ export default {
   },
   computed: {
     calculateTotalCost: function() {
+      console.log(this.additionGroup)
       let additionCost = 0
       const { additionGroup, costLists } = this
 
@@ -109,7 +97,6 @@ export default {
         setCurrentUrl(tabs[0].url)
       });
     }
-
   }
 }
 </script>
@@ -119,8 +106,23 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   min-width: 350px;
+}
+
+.options-group {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.rent-price-wrapper {
+  display: flex;
+}
+
+.price-text {
+  flex: 1 1 30%;
+  align-self: center;
 }
 </style>
