@@ -21,7 +21,7 @@ const rentHost = "rent.591.com.tw"
 
 export default {
   name: 'App',
-  components: { CostCalculator, Readme },
+  components: { CostCalculator, Announcement },
   data: () => ({
     isShowCalculator: false
   }),

@@ -27,6 +27,10 @@
 </template>
 
 <script>
+import Config from "../config/config.env"
+
+console.log(Config.firebase.apiKey)
+
 const additionGroupOptions = ["沒有洗衣機", "沒有床墊", "沒有網路", "沒有飲水機", "沒有代收垃圾"]
 
 export default {
