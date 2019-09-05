@@ -22,14 +22,24 @@
 
       <div>每坪數約 {{ calculateAverageCostBySize }} 元</div>
       <div>總計裸屋成本約：{{ calculateTotalCost }} </div>
+
+      <el-input
+        type="textarea"
+        :autosize="{ minRows: 2, maxRows: 4}"
+        placeholder="請輸入內容"
+        v-model="comment">
+      </el-input>
+
+      <el-row>
+        <el-button type="primary" round v-on:click="rentComment">存檔</el-button>
+      </el-row>
     </el-main>
   </div>
 </template>
 
 <script>
-import Config from "../config/config.env"
+import { insertRentData, getRents } from "../utils/RentModel"
 
-console.log(Config.firebase.apiKey)
 
 const additionGroupOptions = ["沒有洗衣機", "沒有床墊", "沒有網路", "沒有飲水機", "沒有代收垃圾"]
 
@@ -46,7 +56,8 @@ export default {
     },
     currentUrl: null,
     rentPrice: 0,
-    spaceSize: 0
+    spaceSize: 0,
+    comment: ""
   }),
   mounted() {
     this.fetchRentPrice()
@@ -96,6 +107,13 @@ export default {
 
         setCurrentUrl(tabs[0].url)
       });
+    },
+    rentComment() {
+      const { currentUrl, rentPrice, spaceSize, comment } = this
+
+      insertRentData(currentUrl, rentPrice, spaceSize, comment)
+
+      alert("OK")
     }
   }
 }
