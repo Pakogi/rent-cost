@@ -1,11 +1,6 @@
 <template>
   <div class="cost-calculator">
-    <el-header>
-      <h1>租屋虧多少</h1>
-    </el-header>
-
     <el-main>
-      <p>當前網站 {{currentUrl}}</p>
       <p>坪數{{spaceSize}}</p>
 
       <div class="rent-price-wrapper">
@@ -34,13 +29,11 @@
         <el-button type="primary" round v-on:click="rentComment">存檔</el-button>
       </el-row>
     </el-main>
-
-    {{this.$store.state.Rent.data}}
   </div>
 </template>
 
 <script>
-import { insertRentData, getRents } from "../utils/RentModel"
+import { insertRentData } from "../utils/RentModel"
 
 const additionGroupOptions = ["沒有洗衣機", "沒有床墊", "沒有網路", "沒有飲水機", "沒有代收垃圾"]
 
@@ -96,7 +89,6 @@ export default {
 
         let integerPrice = parseInt(priceText.replace(",", ""))
         let integerSpaceSize = spaceSizeText.match(/\d+/)[0]
-
 
         setRentPrice(integerPrice)
         setSpaceSize(integerSpaceSize)
