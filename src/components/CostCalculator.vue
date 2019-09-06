@@ -34,12 +34,13 @@
         <el-button type="primary" round v-on:click="rentComment">存檔</el-button>
       </el-row>
     </el-main>
+
+    {{this.$store.state.Rent.data}}
   </div>
 </template>
 
 <script>
 import { insertRentData, getRents } from "../utils/RentModel"
-
 
 const additionGroupOptions = ["沒有洗衣機", "沒有床墊", "沒有網路", "沒有飲水機", "沒有代收垃圾"]
 

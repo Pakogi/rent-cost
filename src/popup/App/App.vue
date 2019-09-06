@@ -26,6 +26,8 @@ export default {
     isShowCalculator: false
   }),
   created () {
+    this.$store.dispatch('FETCH_RENTS')
+
     const setIsShowCalculator = (boolean) => { this.isShowCalculator = boolean }
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {

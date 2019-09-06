@@ -1,3 +1,5 @@
+import { getRents } from "../../utils/RentModel";
+
 const state = {
   data: {}
 }
@@ -8,7 +10,20 @@ const mutations = {
   }
 }
 
+const actions = {
+  FETCH_RENTS ({ commit }) {
+    getRents().then(querySnapshot => {
+      let rents = querySnapshot.docs.map((rent) => {
+        return rent.data()
+      })
+
+      commit('SAVE_RENT', rents)
+    })
+  }
+}
+
 export default {
   state,
-  mutations
+  mutations,
+  actions
 }

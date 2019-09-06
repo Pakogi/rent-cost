@@ -34,9 +34,5 @@ export function insertRentData(link, price, space_size, comment) {
 }
 
 export function getRents() {
-  db.collection("rents").get().then((querySnapshot) => {
-    querySnapshot.forEach((rent) => {
-        console.log(`${rent.id} => ${rent.data()}`);
-    });
-  });
+  return db.collection("rents").get()
 }
