@@ -1,13 +1,18 @@
 <template>
   <div class="main-app">
     <el-container>
+    <el-main>
       <div v-if="isShowCalculator">
         <cost-calculator></cost-calculator>
+        <comment></comment>
       </div>
 
       <div v-else>
         <announcement></announcement>
       </div>
+
+
+      </el-main>
     </el-container>
   </div>
 </template>
@@ -16,16 +21,19 @@
 
 import CostCalculator from "../../components/CostCalculator"
 import Announcement from "../../components/Announcement"
+import Comment from "../../components/Comment"
 
 const rentHost = "rent.591.com.tw"
 
 export default {
   name: 'App',
-  components: { CostCalculator, Readme },
+  components: { CostCalculator, Announcement, Comment },
   data: () => ({
     isShowCalculator: false
   }),
   created () {
+    this.$store.dispatch('FETCH_RENTS')
+
     const setIsShowCalculator = (boolean) => { this.isShowCalculator = boolean }
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
